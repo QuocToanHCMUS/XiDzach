@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			text-align: center;
+			color: black;
+			font-weight: bold;
+		}
+		hl {
+			font-size: 50px;
+			color: goldenrod;
+		}
+		p {
+			font-size: 17px
+		}
+		#message-el {
+ 		   font-style: italic;
+		}
+	</style>
+</head>
+<body>
+	<hl>Queo khơm tu Xì Dzách</hl>
+	<p id="message-el">BẠN CÓ MUỐN BẮT ĐẦU ?</p>
+	<p id="cards-el">Cards:</p>
+	<p id="sum-el">Tổng:</p>
+	<button onclick="startGame()">Bắt đầu</button>
+	<button onclick="newCard()">Rút Thêm</button>
+	<button onclick="reset()">Reset</button>
+
+
+
+
+	<script type="text/javascript">
+		var firstCard = 0;//Math.floor(Math.random() *10) +1;
+		var secondCard = 0; //Math.floor(Math.random() *10) +1;
+		var cards = []//[firstCard,secondCard]
+		var sum = 0//firstCard + secondCard 
+		let hasBlackJack = false
+		let isAlive = true
+		let message =""
+		let sumEl= document.getElementById("sum-el")
+		let messageEl = document.getElementById("message-el")
+		let cardsEl = document.getElementById("cards-el")
+
+		var count = 0;
+		var start = false;
+		var reFresh = true;
+
+
+		function reset() {
+			firstCard = 0;
+			secondCard = 0;
+			cards = []
+			message =""
+			sum = 0
+			sumEl.textContent = "Tổng: "
+			cardsEl.textContent = "Cards: "
+			messageEl.textContent = "BẠN CÓ MUỐN BẮT ĐẦU?"
+			count = 0;
+			start = false;
+			reFresh = true
+			messageEl.style.color = "black"
+			messageEl.style.backgroundColor = "white"
+		}
+
+
+		function startGame() {
+			if(reFresh==true){
+				start = true
+				firstCard = Math.floor(Math.random() *10) +1;
+				secondCard = Math.floor(Math.random() *10) +1;
+				sum+=firstCard + secondCard 
+				cards.push(firstCard);
+				cards.push(secondCard);
+				console.log(sum)
+				console.log(cards)
+				renderGame();
+			}
+			else{
+				messageEl.textContent = "VUI LÒNG ẤN RESET"
+			}
+			reFresh = false;
+		}
+
+		function renderGame() {
+
+			for(let i =0;i<cards.length ;i++)
+			{
+				cardsEl.textContent += cards[i] + ","
+			}
+			sumEl.textContent ="Tổng:" + sum
+			if(sum<21){
+				if((firstCard==1&&secondCard==10)||(firstCard==10&&secondCard==1))
+				{
+					message = "XÌ DZÁCH"
+					messageEl.style.color = "red"
+					messageEl.style.backgroundColor = "yellow"
+					sumEl.textContent = " "
+				}
+				else if(firstCard==1&&secondCard==1){
+					message = "XÌ BÀN"
+					messageEl.style.color = "red"
+					messageEl.style.backgroundColor = "yellow"
+					sumEl.textContent = " "	
+				}
+				else{
+
+					if(sum < 16){
+						message = "MỜI BẠN RÚT THÊM "
+					}
+					else{
+						if(count==3){
+							message = "NGŨ LINH"
+							messageEl.style.color = "red"
+							messageEl.style.backgroundColor = "yellow"
+						}
+						else{
+						message = "BẠN ĐANG ĐƯỢC " + sum +" BẠN CÓ MUỐN RÚT THÊM ?"
+						}
+					}
+
+					
+				}
+				
+			}
+			else if(sum==21&&count!=3){
+				message = "ĐỦ"
+				messageEl.style.color = "red"
+				messageEl.style.backgroundColor = "yellow"
+				hasBlackJack= true
+			}
+			else if(sum==21&count==3){
+				message = "NGŨ LINH"
+				messageEl.style.color = "yellow"
+				messageEl.style.backgroundColor = "red"
+				hasBlackJack= true
+			}
+			else{
+				message = "LỐ TUỔI"
+				isAlive = false
+				messageEl.style.color = "white"
+				messageEl.style.backgroundColor = "black"
+			}
+
+			messageEl.textContent=message;
+
+		}
+		function newCard() {
+			if(start === false)
+			{
+				messageEl.textContent = "VUI LÒNG ẤN BẮT ĐẦU"
+			}
+			else{
+				if(sum < 21){
+					if(count<3)
+					{
+						if((firstCard==1)&&(secondCard==10)||
+						(firstCard==10)&&(secondCard==1))
+						{
+							messageEl;
+						}
+						else if((firstCard==1)&&(secondCard==1))
+						{
+							messageEl;
+						}
+						else{
+							let card = Math.floor(Math.random() *10) +1
+							cards.push(card)
+							sum += card
+							cardsEl.textContent = "Cards: "
+							count++
+							if(count==3){
+								
+								if(sum ==21){
+									messageEl.textContent = "ĐỦ"
+
+								}
+								else if(sum>21){
+									
+									messageEl.textContent = "LỐ TUỔI"
+								}
+								else{
+									messageEl.textContent="NGŨ LINH"
+								}
+							}
+							
+							renderGame()
+						}
+					}
+					else{
+						messageEl
+					}
+
+					console.log(count)
+				}
+
+				else if(sum ==21){
+					messageEl.textContent = "ĐỦ"
+
+				}
+				else{
+					
+					messageEl.textContent = "LỐ TUỔI"
+				}
+
+
+			}
+		}
+	</script>
+	
+</body>
+</html>
